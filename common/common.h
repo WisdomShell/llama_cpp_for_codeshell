@@ -40,7 +40,7 @@ struct gpt_params {
     int32_t n_threads                       = get_num_physical_cores();
     int32_t n_threads_batch                 = -1;   // number of threads to use for batch processing (-1 = use n_threads)
     int32_t n_predict                       = 64;   // new tokens to predict
-    int32_t n_ctx                           = 512;  // context size
+    int32_t n_ctx                           = 8192;  // context size
     int32_t n_batch                         = 512;  // batch size for prompt processing (must be >=32 to use BLAS)
     int32_t n_keep                          = 0;    // number of tokens to keep from initial prompt
     int32_t n_draft                         = 16;   // number of tokens to draft during speculative decoding
