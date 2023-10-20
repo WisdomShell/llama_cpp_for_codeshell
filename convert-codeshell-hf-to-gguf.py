@@ -122,7 +122,11 @@ gguf_writer.add_token_list(tokens)
 gguf_writer.add_token_scores(scores)
 gguf_writer.add_token_types(toktypes)
 
+print(vocab_size)
+
 special_vocab = gguf.SpecialVocab(dir_model, load_merges = True)
+print(special_vocab.special_token_ids)
+exit()
 special_vocab.add_to_gguf(gguf_writer)
 
 # TENSORS

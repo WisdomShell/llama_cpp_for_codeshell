@@ -89,7 +89,6 @@ class MODEL_ARCH(IntEnum):
     REFACT        : int = auto()
     BERT          : int = auto()
     BLOOM         : int = auto()
-    CODESHELL     : int = auto()
 
 
 class MODEL_TENSOR(IntEnum):
@@ -129,7 +128,6 @@ MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.REFACT:         "refact",
     MODEL_ARCH.BERT:           "bert",
     MODEL_ARCH.BLOOM:          "bloom",
-    MODEL_ARCH.CODESHELL:      "codeshell",
 }
 
 TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
@@ -300,19 +298,6 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
     ],
-    MODEL_ARCH.CODESHELL: {
-        MODEL_TENSOR.TOKEN_EMBD:    "token_embd",
-        MODEL_TENSOR.POS_EMBD:      "position_embd",
-        MODEL_TENSOR.OUTPUT_NORM:   "output_norm",
-        MODEL_TENSOR.OUTPUT:        "output",
-        MODEL_TENSOR.ATTN_NORM:     "blk.{bid}.attn_norm",
-        MODEL_TENSOR.ATTN_QKV:      "blk.{bid}.attn_qkv",
-        MODEL_TENSOR.ATTN_OUT:      "blk.{bid}.attn_output",
-        MODEL_TENSOR.ATTN_ROT_EMBD: "blk.{bid}.attn_rot_embd",
-        MODEL_TENSOR.FFN_NORM:      "blk.{bid}.ffn_norm",
-        MODEL_TENSOR.FFN_DOWN:      "blk.{bid}.ffn_down",
-        MODEL_TENSOR.FFN_UP:        "blk.{bid}.ffn_up",
-    },
     MODEL_ARCH.GPT2: [
         # TODO
     ],
@@ -331,11 +316,7 @@ MODEL_TENSOR_SKIP: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
     ],
     MODEL_ARCH.PERSIMMON: [
         MODEL_TENSOR.ROPE_FREQS,
-    ],
-    MODEL_ARCH.CODESHELL: [
-        MODEL_TENSOR.ROPE_FREQS,
-        MODEL_TENSOR.ATTN_ROT_EMBD,
-    ],
+    ]
 }
 
 
@@ -467,7 +448,6 @@ class TensorNameMap:
         MODEL_TENSOR.ATTN_ROT_EMBD: (
             "model.layers.{bid}.self_attn.rotary_emb.inv_freq",  # llama-hf
             "layers.{bid}.attention.inner_attention.rope.freqs", # llama-pth
-            "transformer.h.{bid}.attn.rotary_emb.inv_freq",      # codeshell
         ),
 
         # Feed-forward norm
