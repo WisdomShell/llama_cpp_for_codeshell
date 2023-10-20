@@ -400,14 +400,6 @@ struct llama_server_context
     {
         auto prompt_tokens = tokenize(prompt, true);  // always add BOS
 
-        // ? DEBUG
-        std::ofstream myfile("./logs/completion_new");
-        for (auto token : prompt_tokens) {
-            myfile << token << " ";
-        }
-        myfile.flush();
-        exit(0);
-
         num_prompt_tokens = prompt_tokens.size();
 
         if (params.n_keep < 0)

@@ -238,16 +238,6 @@ int main(int argc, char ** argv) {
     if (params.interactive_first || params.instruct || !params.prompt.empty() || session_tokens.empty()) {
         LOG("tokenize the prompt\n");
         embd_inp = ::llama_tokenize(ctx, params.prompt, add_bos, true);
-        // ? KDBUG
-        std::ofstream prompt_file("./logs/tokens_str");
-        prompt_file << embd_inp.size() << std::endl;
-        for (auto token : embd_inp) {
-            prompt_file << llama_token_to_piece(ctx, token) << std::endl;
-        }
-        std::ofstream token_file("./logs/tokens");
-        for (auto token : embd_inp) {
-            token_file << token << " ";
-        }
     } else {
         LOG("use session tokens\n");
         embd_inp = session_tokens;
