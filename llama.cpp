@@ -1215,10 +1215,10 @@ struct llama_vocab {
     id special_pad_id = -1;
 
     id linefeed_id = 13;
-    id special_prefix_id = 32007;
-    id special_middle_id = 32009;
-    id special_suffix_id = 32008;
-    id special_eot_id = 32010;
+    id special_prefix_id = 70001;
+    id special_middle_id = 70002;
+    id special_suffix_id = 70003;
+    id special_eot_id = 70000;
 
     int find_bpe_rank(std::string token_left, std::string token_right) const {
         replace_all(token_left,  " ",  "\u0120");

@@ -355,7 +355,7 @@ struct llama_server_context
 
         auto prefix_tokens = tokenize(params.input_prefix, false);
         auto suffix_tokens = tokenize(params.input_suffix, false);
-        const int space_token = 29871;
+        const int space_token = 58360;
         if (suff_rm_leading_spc  && suffix_tokens[0] == space_token) {
             suffix_tokens.erase(suffix_tokens.begin());
         }
