@@ -1781,12 +1781,13 @@ int main(int argc, char **argv)
     svr.set_base_dir(sparams.public_path);
 
     // to make it ctrl+clickable:
-    printf("\nllama server listening at http://%s:%d\n\n", sparams.hostname.c_str(), sparams.port);
+    // printf("\nllama server listening at http://%s:%d\n\n", sparams.hostname.c_str(), sparams.port);
+    printf("\ncodeshell api server started successfully\n\n");
 
-    LOG_INFO("HTTP server listening", {
-                                          {"hostname", sparams.hostname},
-                                          {"port", sparams.port},
-                                      });
+    // LOG_INFO("HTTP server listening", {
+    //                                       {"hostname", sparams.hostname},
+    //                                       {"port", sparams.port},
+    //                                   });
 
     if (!svr.listen_after_bind())
     {
