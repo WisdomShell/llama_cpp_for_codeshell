@@ -63,6 +63,45 @@ enum stop_type
     STOP_PARTIAL,
 };
 
+//Check std::string is valid utf8
+//add by charlie
+static bool isValidUTF8(const std::string& str) {
+  for (size_t i = 0; i < str.size(); ++i) {
+    unsigned char c = str[i];
+
+    if (c <= 0x7F) {
+      continue;
+    }
+
+    if ((c & 0xE0) == 0xC0) {
+      if (i + 1 >= str.size() || (str[i + 1] & 0xC0) != 0x80) {
+        return false;
+      }
+      ++i;
+      continue;
+    }
+
+    if ((c & 0xF0) == 0xE0) {
+      if (i + 2 >= str.size() || (str[i + 1] & 0xC0) != 0x80 || (str[i + 2] & 0xC0) != 0x80) {
+        return false;
+      }
+      i += 2;
+      continue;
+    }
+
+    if ((c & 0xF8) == 0xF0) {
+      if (i + 3 >= str.size() || (str[i + 1] & 0xC0) != 0x80 || (str[i + 2] & 0xC0) != 0x80 || (str[i + 3] & 0xC0) != 0x80) {
+        return false;
+      }
+      i += 3;
+      continue;
+    }
+    return false;
+  }
+  return true;
+}
+
+
 static bool ends_with(const std::string &str, const std::string &suffix)
 {
     return str.size() >= suffix.size() &&
@@ -1461,6 +1500,7 @@ int main(int argc, char **argv)
                 size_t sent_count = 0;
                 size_t sent_token_probs_index = 0;
 
+                std::string to_send_utf8="";
                 while (llama.has_next_token) {
                     const completion_token_output token_with_probs = llama.doCompletion();
                     if (token_with_probs.tok == -1 || llama.multibyte_pending > 0) {
@@ -1507,21 +1547,25 @@ int main(int argc, char **argv)
                             sent_token_probs_index = probs_stop_pos;
                         }
 
-                        const json data = format_partial_response(llama, to_send, probs_output);
+                        to_send_utf8 = to_send_utf8 + to_send;
+                        if (isValidUTF8(to_send_utf8)){
+                            const json data = format_partial_response(llama, to_send_utf8, probs_output);
 
-                        const std::string str =
-                            "data: " +
-                            data.dump(-1, ' ', false, json::error_handler_t::replace) +
-                            "\n\n";
+                             const std::string str =
+                                "data: " +
+                                data.dump(-1, ' ', false, json::error_handler_t::replace) +
+                                "\n\n";
 
-                        LOG_VERBOSE("data stream", {
+                            LOG_VERBOSE("data stream", {
                             { "to_send", str }
-                        });
+                            });
 
-                        if (!sink.write(str.data(), str.size())) {
-                            LOG_VERBOSE("stream closed", {});
-                            llama_print_timings(llama.ctx);
-                            return false;
+                            if (!sink.write(str.data(), str.size())) {
+                                LOG_VERBOSE("stream closed", {});
+                                llama_print_timings(llama.ctx);
+                                return false;
+                            }
+                            to_send_utf8.clear();
                         }
                     }
 
